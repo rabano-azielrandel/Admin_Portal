@@ -62,10 +62,10 @@ export function Hero() {
         <Suspense>
           <div className="flex gap-10">
             <Button asChild size="lg" variant={"outline"}>
-              <Link href="/auth/login">Sign in</Link>
+              <Link href="/login">Sign in</Link>
             </Button>
             <Button asChild size="lg" variant={"tertiary"}>
-              <Link href="/auth/sign-up">Sign up</Link>
+              <Link href="/sign-up">Sign up</Link>
             </Button>
           </div>
         </Suspense>
