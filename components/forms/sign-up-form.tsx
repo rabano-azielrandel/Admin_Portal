@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 
 export function SignUpForm({
   className,
@@ -28,7 +28,7 @@ export function SignUpForm({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSignUp: React.ComponentProps<"form">["onSubmit"] = async (e) => {
     e.preventDefault();
     const supabase = createClient();
     setIsLoading(true);
