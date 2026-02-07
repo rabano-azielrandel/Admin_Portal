@@ -38,6 +38,11 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
+
+      // Reset Inputs
+      setEmail("");
+      setPassword("");
+
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push("/protected");
     } catch (error: unknown) {

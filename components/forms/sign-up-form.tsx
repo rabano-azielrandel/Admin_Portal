@@ -41,6 +41,12 @@ export function SignUpForm({
     try {
       const { error } = await signUpWithEmail(email, password);
       if (error) throw error;
+
+      // Reset Input
+      setEmail("");
+      setPassword("");
+      setRepeatPassword("");
+
       router.push("/sign-up-success");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
