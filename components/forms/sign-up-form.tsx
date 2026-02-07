@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { signUpWithEmail } from "@/lib/auth/signUp";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 
 export function SignUpForm({
   className,
@@ -28,9 +27,8 @@ export function SignUpForm({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSignUp: React.ComponentProps<"form">["onSubmit"] = async (e) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
@@ -43,8 +41,8 @@ export function SignUpForm({
     try {
       const { error } = await signUpWithEmail(email, password);
       if (error) throw error;
-      router.push("/auth/sign-up-success");
-    } catch (error) {
+      router.push("/sign-up-success");
+    } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setIsLoading(false);

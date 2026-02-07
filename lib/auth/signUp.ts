@@ -1,4 +1,4 @@
-import { createClient } from "../supabase/server";
+import { createClient } from "@/lib/supabase/client";
 
 export async function signUpWithEmail(
     email:string,
