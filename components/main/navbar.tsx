@@ -11,7 +11,7 @@ export default function navbar() {
 
   return (
     <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-      <div className="w-full max-w-5xl flex justify-end items-center p-3 px-5 text-sm">
+      <div className="w-full max-w-5xl flex justify-start items-center p-3 px-5 text-sm">
         <ThemeSwitcher />
       </div>
     </nav>
