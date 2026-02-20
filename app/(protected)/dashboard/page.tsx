@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
 import { Suspense } from "react";
 
+import Header from "@/components/protected/dashboard/header";
 import Projects from "@/components/protected/dashboard/projects";
 
 async function UserDetails() {
@@ -20,6 +21,7 @@ async function UserDetails() {
 export default function Dashboard() {
   return (
     <div className="flex-1 w-full h-full flex flex-col p-4 border border-black">
+      <Header />
       <Projects />
     </div>
   );
