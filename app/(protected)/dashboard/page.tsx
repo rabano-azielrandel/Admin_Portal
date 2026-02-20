@@ -19,7 +19,7 @@ async function UserDetails() {
 
 export default function Dashboard() {
   return (
-    <div className="flex-1 w-full flex flex-col bg-red-500">
+    <div className="flex-1 w-full h-full flex flex-col p-4 border border-black">
       <Projects />
     </div>
   );

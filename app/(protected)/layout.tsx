@@ -1,8 +1,9 @@
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import Sidebar from "@/components/protected/sidebar";
+
 import { hasEnvVars } from "@/lib/utils";
-import Link from "next/link";
 import { Suspense } from "react";
 
 export default function ProtectedLayout({
@@ -27,11 +28,12 @@ export default function ProtectedLayout({
             )}
           </div>
         </nav>
-        <div className="flex-1 flex flex-col gap-20 w-full mx-auto py-5 px-12 bg-green-500">
-          {children}
+        <div className="relative flex-1 flex gap-10 w-full">
+          <Sidebar />
+          <div className="flex-1 py-5 px-36 bg-blue-400">{children}</div>
         </div>
 
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-10">
+        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4">
           <p>
             Powered by{" "}
             <a
