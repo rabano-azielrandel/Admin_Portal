@@ -13,7 +13,7 @@ export default function ProtectedLayout({
   return (
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col items-center">
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16 px-5">
+        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16 px-2">
           <div className="w-full flex justify-between items-center text-sm">
             <div className="flex gap-5 items-center font-semibold">
               <ThemeSwitcher />
@@ -27,7 +27,7 @@ export default function ProtectedLayout({
             )}
           </div>
         </nav>
-        <div className="flex-1 flex flex-col gap-20 w-full mx-auto p-5 bg-green-500">
+        <div className="flex-1 flex flex-col gap-20 w-full mx-auto py-5 px-12 bg-green-500">
           {children}
         </div>
 
