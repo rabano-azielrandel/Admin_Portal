@@ -12,7 +12,7 @@ const header = () => {
       </div>
       <div className="w-full flex justify-end gap-4 pr-4 bg-amber-300">
         {data.map((item, index) => (
-          <div className="flex flex-col border boder-black">
+          <div key={index} className="flex flex-col border boder-black">
             <p className="text-xs font-light">{item.name}</p>
             <p className="text-lg font-medium">{item.qty}</p>
           </div>
