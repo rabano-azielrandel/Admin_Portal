@@ -7,12 +7,12 @@ const data = [
 const header = () => {
   return (
     <div className="flex w-full">
-      <div className="w-full p-4 bg-green-300">
+      <div className="w-full p-4">
         <p className="text-lg font-medium tracking-wider">HEY THERE CHIEF!</p>
       </div>
-      <div className="w-full flex justify-end gap-4 pr-4 bg-amber-300">
+      <div className="w-full flex justify-end gap-4 pr-4">
         {data.map((item, index) => (
-          <div key={index} className="flex flex-col border boder-black">
+          <div key={index} className="flex flex-col justify-center">
             <p className="text-xs font-light">{item.name}</p>
             <p className="text-lg font-medium">{item.qty}</p>
           </div>
