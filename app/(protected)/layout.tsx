@@ -30,7 +30,7 @@ export default function ProtectedLayout({
         </nav>
         <div className="relative flex-1 flex gap-10 w-full">
           <Sidebar />
-          <div className="flex-1 py-5 px-36 bg-blue-500">{children}</div>
+          <div className="flex-1 py-5 px-36 ">{children}</div>
         </div>
 
         <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4">
