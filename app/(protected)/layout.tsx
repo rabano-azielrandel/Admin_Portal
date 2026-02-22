@@ -13,8 +13,8 @@ export default function ProtectedLayout({
 }) {
   return (
     <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col items-center">
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16 px-2">
+      <div className="relative flex-1 w-full flex flex-col items-center">
+        <nav className="sticky top-0 left-0 w-full h-16 flex justify-center border-b border-b-foreground/10 px-2 bg-background z-20">
           <div className="w-full flex justify-between items-center text-sm">
             <div className="flex gap-5 items-center font-semibold">
               <ThemeSwitcher />
@@ -30,7 +30,7 @@ export default function ProtectedLayout({
         </nav>
         <div className="relative flex-1 flex gap-10 w-full">
           <Sidebar />
-          <div className="flex-1 py-5 px-36 bg-blue-400">{children}</div>
+          <div className="flex-1 py-5 px-36 bg-blue-500">{children}</div>
         </div>
 
         <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4">

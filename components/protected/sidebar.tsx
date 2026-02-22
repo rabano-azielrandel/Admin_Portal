@@ -21,7 +21,7 @@ export default function Sidebar() {
     <aside
       className="
         group
-        absolute top-0 left-0
+        fixed top-16 left-0
         w-14 hover:w-40
         h-full
         bg-background
@@ -29,7 +29,7 @@ export default function Sidebar() {
         transition-all duration-300
         cursor-pointer
         overflow-hidden
-        z-50
+        z-10
       "
     >
       <div className="flex flex-col gap-2 p-2">
