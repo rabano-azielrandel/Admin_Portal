@@ -11,7 +11,7 @@ import Link from "next/link";
 const sidebarIcons = [
   { icon: <Home size={20} />, label: "Home", href: "/dashboard" },
   { icon: <Table size={20} />, label: "Table Editor", href: "/table-editor" },
-  { icon: <Terminal size={20} />, label: "SQL Editor", href: "/dashboard" },
+  { icon: <Terminal size={20} />, label: "SQL Editor", href: "/sql-editor" },
   { icon: <Database size={20} />, label: "Database", href: "/dashboard" },
   { icon: <History size={20} />, label: "Logs", href: "/dashboard" },
   { icon: <Settings size={20} />, label: "Settings", href: "/dashboard" },
