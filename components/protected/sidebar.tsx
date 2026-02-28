@@ -6,14 +6,15 @@ import {
   History,
   Settings,
 } from "lucide-react";
+import Link from "next/link";
 
 const sidebarIcons = [
-  { icon: <Home size={20} />, label: "Home" },
-  { icon: <Table size={20} />, label: "Table Editor" },
-  { icon: <Terminal size={20} />, label: "SQL Editor" },
-  { icon: <Database size={20} />, label: "Database" },
-  { icon: <History size={20} />, label: "Logs" },
-  { icon: <Settings size={20} />, label: "Settings" },
+  { icon: <Home size={20} />, label: "Home", href: "/dashboard" },
+  { icon: <Table size={20} />, label: "Table Editor", href: "/table-editor" },
+  { icon: <Terminal size={20} />, label: "SQL Editor", href: "/dashboard" },
+  { icon: <Database size={20} />, label: "Database", href: "/dashboard" },
+  { icon: <History size={20} />, label: "Logs", href: "/dashboard" },
+  { icon: <Settings size={20} />, label: "Settings", href: "/dashboard" },
 ];
 
 export default function Sidebar() {
@@ -34,8 +35,9 @@ export default function Sidebar() {
     >
       <div className="flex flex-col gap-2 p-2">
         {sidebarIcons.map((item, index) => (
-          <div
+          <Link
             key={index}
+            href={item.href}
             className="flex items-center gap-4 p-2 rounded-md hover:bg-primary/10 cursor-pointer"
           >
             <div className="flex-shrink-0">{item.icon}</div>
@@ -49,7 +51,7 @@ export default function Sidebar() {
             >
               {item.label}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </aside>
