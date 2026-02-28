@@ -238,14 +238,14 @@ export default function projects() {
 
         <Card className="w-full border border-black">
           <CardHeader className="flex-1">
-            <CardTitle className="text-lg">Project 2</CardTitle>
+            <CardTitle className="text-lg">Zoom in</CardTitle>
             <CardDescription className="text-xs">
-              This is for project 2
+              This is for zoom in zoom out
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="relative flex justify-center items-center h-56 p-4 border border-black overflow-hidden">
-              hello
+              hover to zoom in
             </div>
           </CardContent>
         </Card>
@@ -254,12 +254,12 @@ export default function projects() {
           <CardHeader className="flex-1">
             <CardTitle className="text-lg">Project </CardTitle>
             <CardDescription className="text-xs">
-              This is for project 3
+              This is for Staggered flow
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="relative flex justify-center items-center h-56 p-4 border border-black">
-              hi
+              waterflow objects here
             </div>
           </CardContent>
         </Card>
