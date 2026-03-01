@@ -1,151 +1,200 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import {
   Card,
+  CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardHeader,
   CardFooter,
 } from "@/components/ui/card";
+
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { FormItem, FormLabel, FormDescription } from "@/components/ui/form";
 
-import { useState } from "react";
-import Link from "next/link";
+/* =========================
+   MOCK DATABASE
+========================= */
 
-export default function Page() {
-  const [rowIndex, setRowIndex] = useState("");
-  const [colIndex, setColIndex] = useState("");
-  const [span, setSpan] = useState("");
-  const [variant, setVariant] = useState("");
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [className, setClassName] = useState("");
+const mockDB = {
+  Projects: [
+    { slug: "portfolio-v1", name: "Portfolio V1" },
+    { slug: "admin-dashboard", name: "Admin Dashboard" },
+  ],
+  ProjectCard: [],
+};
 
-  const handleUpload = (e: React.FormEvent) => {
+/* =========================
+   TABLE SCHEMA MAP
+========================= */
+
+const tableSchemas = {
+  Projects: [
+    { name: "slug", label: "Slug", type: "text" },
+    { name: "name", label: "Name", type: "text" },
+  ],
+  ProjectCard: [
+    { name: "project_slug", label: "Project", type: "foreign_project" },
+    { name: "row_index", label: "Row Index", type: "number" },
+    { name: "col_index", label: "Column Index", type: "number" },
+    { name: "span", label: "Span", type: "number" },
+    { name: "variant", label: "Variant", type: "text" },
+    { name: "title", label: "Title", type: "text" },
+    { name: "description", label: "Description", type: "text" },
+    { name: "class_name", label: "Class Name", type: "text" },
+  ],
+};
+
+export default function DynamicAdmin() {
+  const [selectedTable, setSelectedTable] =
+    useState<keyof typeof tableSchemas>("Projects");
+
+  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [database, setDatabase] = useState(mockDB);
+
+  useEffect(() => {
+    setFormData({});
+  }, [selectedTable]);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload = {
-      rowIndex: Number(rowIndex),
-      colIndex: Number(colIndex),
-      span: Number(span),
-      variant,
-      title,
-      desc,
-      className,
-    };
+    setDatabase((prev) => ({
+      ...prev,
+      [selectedTable]: [...prev[selectedTable], formData],
+    }));
 
-    console.log("Submitted Project:", payload);
-
-    // TODO: connect to your backend / Supabase / API route
-
-    // Reset form
-    setRowIndex("");
-    setColIndex("");
-    setSpan("");
-    setVariant("");
-    setTitle("");
-    setDesc("");
-    setClassName("");
+    setFormData({});
   };
 
+  const fields = tableSchemas[selectedTable];
+
   return (
-    <div className="flex justify-center items-center p-6">
-      <Card className="w-full max-w-2xl">
+    <div className="min-h-screen bg-background p-8 flex justify-center">
+      <Card className="w-full max-w-6xl">
         <CardHeader>
-          <CardTitle className="text-2xl">Project Table</CardTitle>
-          <CardDescription>Fill up to add a new project</CardDescription>
+          <CardTitle className="text-2xl">Dynamic Admin Panel</CardTitle>
+          <CardDescription>Table-driven mock CMS interface</CardDescription>
         </CardHeader>
 
-        <CardContent>
-          <form onSubmit={handleUpload} className="space-y-6">
-            {/* Grid Placement Section */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="rowIndex">Row Index</Label>
-                <Input
-                  id="rowIndex"
-                  type="number"
-                  placeholder="1"
-                  required
-                  value={rowIndex}
-                  onChange={(e) => setRowIndex(e.target.value)}
-                />
-              </div>
+        <CardContent className="space-y-8">
+          {/* TABLE PICKER */}
+          <FormItem className="max-w-sm">
+            <FormLabel>Select Table</FormLabel>
+            <Select
+              value={selectedTable}
+              onValueChange={(value) =>
+                setSelectedTable(value as keyof typeof tableSchemas)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(tableSchemas).map((table) => (
+                  <SelectItem key={table} value={table}>
+                    {table}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormDescription>
+              Changing the table will regenerate the form.
+            </FormDescription>
+          </FormItem>
 
-              <div className="grid gap-2">
-                <Label htmlFor="colIndex">Column Index</Label>
-                <Input
-                  id="colIndex"
-                  type="number"
-                  placeholder="1"
-                  required
-                  value={colIndex}
-                  onChange={(e) => setColIndex(e.target.value)}
-                />
-              </div>
+          {/* FLEX ADMIN LAYOUT */}
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* LEFT SIDE — FORM */}
+            <div className="flex-1">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-6 border rounded-xl p-6"
+              >
+                {fields.map((field) => (
+                  <FormItem key={field.name}>
+                    <FormLabel>{field.label}</FormLabel>
 
-              <div className="grid gap-2">
-                <Label htmlFor="span">Span</Label>
-                <Input
-                  id="span"
-                  type="number"
-                  placeholder="1"
-                  value={span}
-                  onChange={(e) => setSpan(e.target.value)}
-                />
-              </div>
+                    {field.type === "text" && (
+                      <Input
+                        value={formData[field.name] || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [field.name]: e.target.value,
+                          })
+                        }
+                      />
+                    )}
 
-              <div className="grid gap-2">
-                <Label htmlFor="variant">Variant</Label>
-                <Input
-                  id="variant"
-                  placeholder="split | ripple | fan | dice"
-                  value={variant}
-                  onChange={(e) => setVariant(e.target.value)}
-                />
-              </div>
+                    {field.type === "number" && (
+                      <Input
+                        type="number"
+                        value={formData[field.name] || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [field.name]: Number(e.target.value),
+                          })
+                        }
+                      />
+                    )}
+
+                    {field.type === "foreign_project" && (
+                      <Select
+                        value={formData[field.name] || ""}
+                        onValueChange={(value) =>
+                          setFormData({
+                            ...formData,
+                            [field.name]: value,
+                          })
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Project" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {database.Projects.map((project) => (
+                            <SelectItem key={project.slug} value={project.slug}>
+                              {project.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  </FormItem>
+                ))}
+
+                <CardFooter className="px-0 pt-4 flex justify-end">
+                  <Button type="submit">Insert into {selectedTable}</Button>
+                </CardFooter>
+              </form>
             </div>
 
-            {/* Content Section */}
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
+            {/* RIGHT SIDE — DATA VIEWER */}
+            <div className="flex-1">
+              <div className="border rounded-xl p-6 h-full">
+                <h4 className="font-semibold mb-4">
+                  {selectedTable} Table Preview
+                </h4>
 
-              <div className="grid gap-2">
-                <Label htmlFor="desc">Description</Label>
-                <Input
-                  id="desc"
-                  required
-                  value={desc}
-                  onChange={(e) => setDesc(e.target.value)}
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="className">Custom Class</Label>
-                <Input
-                  id="className"
-                  placeholder="optional tailwind classes"
-                  value={className}
-                  onChange={(e) => setClassName(e.target.value)}
-                />
+                <div className="overflow-auto max-h-[400px] text-xs bg-muted p-4 rounded-md">
+                  <pre>{JSON.stringify(database[selectedTable], null, 2)}</pre>
+                </div>
               </div>
             </div>
-
-            <CardFooter className="px-0 pt-4 flex justify-end">
-              <Button type="submit">Add Project</Button>
-            </CardFooter>
-          </form>
+          </div>
         </CardContent>
       </Card>
     </div>
