@@ -1,19 +1,11 @@
-import {
-  Home,
-  Table2,
-  Terminal,
-  Database,
-  History,
-  Settings,
-} from "lucide-react";
+import { Home, Table2, Terminal, History, Settings } from "lucide-react";
 import Link from "next/link";
 
 const sidebarIcons = [
   { icon: <Home size={20} />, label: "Home", href: "/dashboard" },
   { icon: <Table2 size={20} />, label: "Data Input", href: "/data-input" },
   { icon: <Terminal size={20} />, label: "SQL Editor", href: "/sql-editor" },
-  { icon: <Database size={20} />, label: "Database", href: "/dashboard" },
-  { icon: <History size={20} />, label: "Logs", href: "/dashboard" },
+  { icon: <History size={20} />, label: "Logs", href: "/log-panel" },
   { icon: <Settings size={20} />, label: "Settings", href: "/dashboard" },
 ];
 
