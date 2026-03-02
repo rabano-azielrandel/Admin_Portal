@@ -6,7 +6,7 @@ const sidebarIcons = [
   { icon: <Table2 size={20} />, label: "Data Input", href: "/data-input" },
   { icon: <Terminal size={20} />, label: "SQL Editor", href: "/sql-editor" },
   { icon: <History size={20} />, label: "Logs", href: "/log-panel" },
-  { icon: <Settings size={20} />, label: "Settings", href: "/dashboard" },
+  { icon: <Settings size={20} />, label: "Settings", href: "/admin-settings" },
 ];
 
 export default function Sidebar() {
