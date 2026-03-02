@@ -25,21 +25,33 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setIsLoading(true);
     setError(null);
 
     try {
-      await signIn(email, password);
+      const res = await fetch("/api/log-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error);
+      }
 
       setEmail("");
       setPassword("");
 
       router.push("/dashboard");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : "Login failed");
     } finally {
       setIsLoading(false);
     }
