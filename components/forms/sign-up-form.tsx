@@ -39,8 +39,19 @@ export function SignUpForm({
     }
 
     try {
-      const { error } = await signUpWithEmail(email, password);
-      if (error) throw error;
+      const res = await fetch("/api/log-signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res) {
+        throw new Error(data.error);
+      }
 
       // Reset Input
       setEmail("");
