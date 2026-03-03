@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { DateRange } from "react-day-picker";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,32 +13,37 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 
+import { LoginLog } from "@/types/LoginLog";
+import { getAuthLogs } from "@/lib/protected/getLogs";
 import { formatDate } from "@/lib/utils";
 
-type LoginLog = {
-  id: string;
-  email: string;
-  ip_address?: string;
-  status: "success" | "failed";
-  created_at: string;
-};
-
 export default function Page() {
-  const PAGE_SIZE = 5;
+  // LOGS
+  const [logs, setLogs] = useState<LoginLog[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // 🔹 Hardcoded logs (15 entries for testing pagination)
-  const logs: LoginLog[] = Array.from({ length: 15 }).map((_, i) => ({
-    id: `${i + 1}`,
-    email: `user${i + 1}@email.com`,
-    ip_address: `192.168.1.${i + 10}`,
-    status: i % 2 === 0 ? "success" : "failed",
-    created_at: new Date(2026, 2, (i % 7) + 1, 9, i * 3).toISOString(),
-  }));
-
+  // PAGINATION
   const [range, setRange] = useState<DateRange | undefined>();
   const [pageIndex, setPageIndex] = useState(0);
+  const PAGE_SIZE = 5;
 
-  // 🔹 Filter by date range
+  // LOGS USE EFFECT
+  useEffect(() => {
+    async function fetchLogs() {
+      try {
+        const data = await getAuthLogs();
+        setLogs(data ?? []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLogs();
+  }, []);
+
+  // DATE RANGE
   const filteredLogs = useMemo(() => {
     if (!range?.from) return logs;
 
@@ -59,13 +64,16 @@ export default function Page() {
     });
   }, [logs, range]);
 
-  // 🔹 Pagination
+  // PAGINATION CONTINUATION
   const totalPages = Math.ceil(filteredLogs.length / PAGE_SIZE);
 
   const paginatedLogs = filteredLogs.slice(
     pageIndex * PAGE_SIZE,
     pageIndex * PAGE_SIZE + PAGE_SIZE,
   );
+
+  // LOGS SKELETON SUBJECT FOR IMPROVEMENT
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div className="flex justify-center p-6">
@@ -134,9 +142,10 @@ export default function Page() {
               </div>
 
               <Badge
-                variant={log.status === "success" ? "default" : "destructive"}
+                variant={log.status === "success" ? "success" : "destructive"}
+                className="w-20 flex justify-center"
               >
-                {log.status}
+                {log.status.toUpperCase()}
               </Badge>
             </div>
           ))}
