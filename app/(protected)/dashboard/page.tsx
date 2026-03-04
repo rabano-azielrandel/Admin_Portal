@@ -19,10 +19,12 @@ async function UserDetails() {
 }
 
 export default function Dashboard() {
+  // CHECK IF THE ITS USER OR ADMIN
   return (
     <div className="flex-1 w-full h-full flex flex-col p-4 border border-black">
       <Header />
       <Projects />
+      SUBJECT FOR CHANGE
     </div>
   );
 }
