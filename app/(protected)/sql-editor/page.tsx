@@ -95,7 +95,7 @@ export default function Page() {
                       {Object.keys(output[0]).map((key) => (
                         <th
                           key={key}
-                          className="text-left border-b pb-2 pr-4 font-semibold"
+                          className="text-left border-b pb-2 pr-4 font-semibold min-w-[280px]"
                         >
                           {key}
                         </th>
