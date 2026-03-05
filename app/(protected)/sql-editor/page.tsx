@@ -1,28 +1,49 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scrollarea";
 import { Play, Database } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Page() {
-  const [query, setQuery] = useState("SELECT * FROM users LIMIT 10;");
+  const [query, setQuery] = useState(
+    `SELECT * FROM public."Projects" LIMIT 10;`,
+  );
   const [output, setOutput] = useState<any[]>([]);
   const [isRunning, setIsRunning] = useState(false);
 
   const runQuery = async () => {
-    setIsRunning(true);
+    try {
+      setIsRunning(true);
 
-    await new Promise((res) => setTimeout(res, 800));
+      const res = await fetch("/api/sql-reader", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+      });
 
-    setOutput([
-      { id: 1, name: "Azi", role: "Developer" },
-      { id: 2, name: "Eira", role: "AI Assistant" },
-    ]);
+      const result = await res.json();
 
-    setIsRunning(false);
+      if (!res.ok) {
+        throw new Error(result.error);
+      }
+
+      setOutput(result.data ?? []);
+    } catch (err: any) {
+      setOutput([{ error: err.message }]);
+    } finally {
+      setIsRunning(false);
+    }
   };
 
   return (
@@ -31,7 +52,7 @@ export default function Page() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl flex items-center gap-2">
             <Database className="w-5 h-5" />
-            SQL Editor
+            SQL READER
           </CardTitle>
           <Button onClick={runQuery} disabled={isRunning}>
             <Play className="w-4 h-4 mr-2" />
