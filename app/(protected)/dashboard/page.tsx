@@ -24,7 +24,11 @@ export default function Dashboard() {
     <div className="flex-1 w-full h-full flex flex-col p-4 border border-black">
       <Header />
       <Projects />
-      SUBJECT FOR CHANGE
+      <div className="flex flex-col">
+        <p>UPDATE DATA INPUT</p>
+        <p>CREATE A SETTINGS TO UPDATE user_profiles table</p>
+        <p>CHANGE DASHBOARD</p>
+      </div>
     </div>
   );
 }
