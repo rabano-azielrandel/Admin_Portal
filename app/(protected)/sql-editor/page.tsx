@@ -71,6 +71,7 @@ export default function Page() {
             <textarea
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              spellCheck={false}
               className="w-full h-64 p-4 font-mono text-sm bg-muted rounded-2xl border focus:outline-none focus:ring-2 focus:ring-primary resize-none"
             />
           </motion.div>
