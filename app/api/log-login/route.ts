@@ -1,41 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { signIn } from "@/lib/auth/signIn";
+import { insertLogs } from "@/lib/protected/logService";
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient();
 
   const { email, password } = await req.json();
 
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
-
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
   const userAgent = req.headers.get("user-agent") ?? "unknown";
 
-  // Login auth
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  try{
+    // Login auth
+    const data= await signIn({ email, password });
 
-  const status = error ? "failed" : "success";
+    await insertLogs({
+      id: data.user?.id ?? null,
+      email,
+      event_type: "login",
+      status : "success",
+      ip_address: ip,
+      device: "web",
+      user_agent: userAgent,
+    });
 
-  // Log regardless of success or failure
-  await supabase.rpc("log_auth_event", {
-    p_user_id: data?.user?.id ?? null,
-    p_email: email,
-    p_event_type: "login",
-    p_status: status,
-    p_ip_address: ip,
-    p_device: "web",
-    p_user_agent: userAgent,
-  });
+    return NextResponse.json({ user: data.user });
+  } catch (err: any) {
+      await insertLogs({
+        id: null,
+        email,
+        event_type: "login",
+        status: "failed",
+        ip_address: ip,
+        device: "web",
+        user_agent: userAgent,
+    });
 
-  if (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
-
-  return NextResponse.json({ user: data.user });
 }
