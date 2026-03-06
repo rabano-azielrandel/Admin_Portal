@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 
 export default function Page() {
   const [query, setQuery] = useState(
-    `SELECT * FROM public."Projects" LIMIT 10;`,
+    `SELECT * FROM information_schema.tables \nWHERE table_schema = 'public' AND table_type = 'BASE TABLE';`,
   );
   const [output, setOutput] = useState<any[]>([]);
   const [isRunning, setIsRunning] = useState(false);
