@@ -70,6 +70,8 @@ export default function DynamicAdmin() {
           );
           const schemaData: Field[] = await schemaRes.json();
 
+          console.log(schemaData);
+
           setSchemas((prev) => ({
             ...prev,
             [selectedTable]: schemaData,
@@ -81,8 +83,6 @@ export default function DynamicAdmin() {
           `/api/table-preview?tableName=${selectedTable}`,
         );
         const previewData = await previewRes.json();
-
-        console.log("table: ", selectedTable, "data: ", previewData);
 
         setTablePreview((prev) => ({
           ...prev,
@@ -220,18 +220,95 @@ export default function DynamicAdmin() {
                     <FormItem key={field.column_name}>
                       <FormLabel>{field.column_name}</FormLabel>
 
-                      <Input
-                        type={inputType}
-                        value={formData[field.column_name] ?? ""}
-                        onChange={(e) =>
-                          updateField(
-                            field.column_name,
-                            inputType === "number"
-                              ? Number(e.target.value)
-                              : e.target.value,
-                          )
-                        }
-                      />
+                      {/* text array */}
+                      {["ARRAY"].includes(field.data_type) && (
+                        <Input
+                          type="text"
+                          placeholder="Enter values separated by commas"
+                          value={formData[field.column_name]?.join(", ") ?? ""}
+                          onChange={(e) =>
+                            updateField(
+                              field.column_name,
+                              e.target.value
+                                .split(",")
+                                .map((item) => item.trim()) // remove extra spaces
+                                .filter((item) => item.length > 0), // ignore empty strings
+                            )
+                          }
+                        />
+                      )}
+
+                      {/* text */}
+                      {["char", "varchar", "text", "citext"].includes(
+                        field.data_type,
+                      ) && (
+                        <Input
+                          type="text"
+                          value={formData[field.column_name] ?? ""}
+                          onChange={(e) =>
+                            updateField(field.column_name, e.target.value)
+                          }
+                        />
+                      )}
+
+                      {/* numeric */}
+                      {[
+                        "smallint",
+                        "integer",
+                        "int",
+                        "bigint",
+                        "numeric",
+                        "decimal",
+                        "real",
+                        "double precision",
+                      ].includes(field.data_type) && (
+                        <Input
+                          type="number"
+                          value={formData[field.column_name] ?? ""}
+                          onChange={(e) =>
+                            updateField(
+                              field.column_name,
+                              e.target.value === ""
+                                ? ""
+                                : Number(e.target.value),
+                            )
+                          }
+                        />
+                      )}
+
+                      {/* Boolean */}
+                      {["boolean"].includes(field.data_type) && (
+                        <div className="flex items-center mt-1">
+                          <input
+                            type="checkbox"
+                            checked={!!formData[field.column_name]}
+                            onChange={(e) =>
+                              updateField(field.column_name, e.target.checked)
+                            }
+                            className="w-10 h-6 rounded-full appearance-none bg-gray-300 checked:bg-blue-500 relative cursor-pointer transition-all duration-200
+                                        before:content-[''] before:absolute before:w-4 before:h-4 before:bg-white before:rounded-full before:shadow-md
+                                        before:top-1 before:left-1 checked:before:translate-x-4 before:transition-all"
+                          />
+                        </div>
+                      )}
+
+                      {/* date */}
+                      {[
+                        "timestamp",
+                        "timestamp without time zone",
+                        "timestamp with time zone",
+                        "timestamptz",
+                        "date",
+                        "time",
+                      ].includes(field.data_type) && (
+                        <Input
+                          type="datetime-local" // or "date" if you only want date
+                          value={formData[field.column_name] ?? ""}
+                          onChange={(e) =>
+                            updateField(field.column_name, e.target.value)
+                          }
+                        />
+                      )}
                     </FormItem>
                   );
                 })}
