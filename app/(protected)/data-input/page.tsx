@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormItem, FormLabel, FormDescription } from "@/components/ui/form";
+import { form } from "framer-motion/client";
 
 type Field = {
   column_name: string;
@@ -32,6 +33,8 @@ export default function DynamicAdmin() {
 
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [tablePreview, setTablePreview] = useState<Record<string, any[]>>({});
+
+  const [rawInputs, setRawInputs] = useState<Record<string, string>>({});
 
   /* =====================================================
      1️⃣ FETCH TABLE LIST (RUN ONCE)
@@ -70,8 +73,6 @@ export default function DynamicAdmin() {
           );
           const schemaData: Field[] = await schemaRes.json();
 
-          console.log(schemaData);
-
           setSchemas((prev) => ({
             ...prev,
             [selectedTable]: schemaData,
@@ -86,7 +87,9 @@ export default function DynamicAdmin() {
 
         setTablePreview((prev) => ({
           ...prev,
-          [selectedTable]: previewData,
+          [selectedTable]: Array.isArray(previewData)
+            ? previewData
+            : previewData.data,
         }));
       } catch (error) {
         console.error("Failed to fetch metadata:", error);
@@ -214,8 +217,6 @@ export default function DynamicAdmin() {
                 className="space-y-6 border rounded-xl p-6"
               >
                 {fields.map((field) => {
-                  const inputType = getInputType(field.data_type);
-
                   return (
                     <FormItem key={field.column_name}>
                       <FormLabel>{field.column_name}</FormLabel>
@@ -225,24 +226,21 @@ export default function DynamicAdmin() {
                         <Input
                           type="text"
                           placeholder="Enter values separated by commas"
-                          value={formData[field.column_name + "_raw"] ?? ""}
+                          value={rawInputs[field.column_name] ?? ""}
                           onChange={(
                             e: React.ChangeEvent<HTMLInputElement>,
                           ) => {
-                            // store the raw string for typing
-                            updateField(
-                              field.column_name + "_raw",
-                              e.target.value,
-                            );
-                          }}
-                          onBlur={() => {
-                            // convert raw string to array on blur
-                            const raw: string =
-                              formData[field.column_name + "_raw"] ?? "";
-                            const arr: string[] = raw
+                            const raw = e.target.value;
+
+                            setRawInputs((prev) => ({
+                              ...prev,
+                              [field.column_name]: raw,
+                            }));
+
+                            const arr = raw
                               .split(",")
-                              .map((item: string) => item.trim())
-                              .filter((item: string) => item.length > 0);
+                              .map((item) => item.trim())
+                              .filter((item) => item.length > 0);
 
                             updateField(field.column_name, arr);
                           }}
