@@ -4,8 +4,6 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const tableName = searchParams.get("tableName");
 
-  console.log("table:", tableName);
-
   if (!tableName) {
     return Response.json(
       { error: "Table name required" },
