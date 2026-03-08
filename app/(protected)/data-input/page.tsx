@@ -110,15 +110,37 @@ export default function DynamicAdmin() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setTablePreview((prev) => ({
-      ...prev,
-      [selectedTable]: [...(prev[selectedTable] || []), formData],
-    }));
+    try {
+      const res = await fetch("/api/insert-data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          table: selectedTable,
+          data: formData,
+        }),
+      });
 
-    setFormData({});
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || "Insert failed");
+      }
+
+      /* update preview */
+      setTablePreview((prev) => ({
+        ...prev,
+        [selectedTable]: [...(prev[selectedTable] || []), result.data],
+      }));
+
+      setFormData({});
+    } catch (err) {
+      console.error("Insert failed:", err);
+    }
   };
 
   const fields = schemas[selectedTable] || [];

@@ -13,6 +13,10 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse;
   }
 
+  if (request.nextUrl.pathname.startsWith("/api")) {
+    return supabaseResponse;
+  }
+
   // With Fluid compute, don't put this client in a global environment
   // variable. Always create a new one on each request.
   const supabase = createServerClient(
@@ -48,14 +52,18 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims;
 
   const publicRoutes = [
-    "/", 
     "/login",
     "/sign-up",
     "/sign-up-success",
   ];
 
-  const isPublicRoute = publicRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
+  const pathname = request.nextUrl.pathname;
+  const isPublicRoute =
+    pathname === "/" ||
+    publicRoutes.some(
+      (route) =>
+        pathname === route ||
+        pathname.startsWith(route + "/")
   );
 
   if (
