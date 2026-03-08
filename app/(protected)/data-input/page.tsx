@@ -82,6 +82,8 @@ export default function DynamicAdmin() {
         );
         const previewData = await previewRes.json();
 
+        console.log("table: ", selectedTable, "data: ", previewData);
+
         setTablePreview((prev) => ({
           ...prev,
           [selectedTable]: previewData,
