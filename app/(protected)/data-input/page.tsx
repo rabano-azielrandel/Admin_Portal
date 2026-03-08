@@ -225,16 +225,27 @@ export default function DynamicAdmin() {
                         <Input
                           type="text"
                           placeholder="Enter values separated by commas"
-                          value={formData[field.column_name]?.join(", ") ?? ""}
-                          onChange={(e) =>
+                          value={formData[field.column_name + "_raw"] ?? ""}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>,
+                          ) => {
+                            // store the raw string for typing
                             updateField(
-                              field.column_name,
-                              e.target.value
-                                .split(",")
-                                .map((item) => item.trim()) // remove extra spaces
-                                .filter((item) => item.length > 0), // ignore empty strings
-                            )
-                          }
+                              field.column_name + "_raw",
+                              e.target.value,
+                            );
+                          }}
+                          onBlur={() => {
+                            // convert raw string to array on blur
+                            const raw: string =
+                              formData[field.column_name + "_raw"] ?? "";
+                            const arr: string[] = raw
+                              .split(",")
+                              .map((item: string) => item.trim())
+                              .filter((item: string) => item.length > 0);
+
+                            updateField(field.column_name, arr);
+                          }}
                         />
                       )}
 
