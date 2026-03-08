@@ -2,15 +2,18 @@ import { getTableSchema } from "@/lib/protected/getTableSchema";
 
 
 export async function GET(req: Request) {
-    const table = await req.json();
+  const { searchParams } = new URL(req.url);
+  const table = searchParams.get("table");
 
-    try {
-        const data = await getTableSchema(table);
-        
-        console.log(data);
+  if (!table) {
+    return Response.json({ error: "Table name required" }, { status: 400 });
+  }
 
-        return Response.json({data});
-    } catch (error: any) {
-        return Response.json({error: error.message}, {status: 400})
-    }
+  try {
+    const data = await getTableSchema(table);
+
+    return Response.json(data);
+  } catch (error: any) {
+    return Response.json( { error: error.message }, { status: 400 } );
+  }
 }
