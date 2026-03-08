@@ -150,10 +150,10 @@ export default function DynamicAdmin() {
      UI
   ====================================================== */
   return (
-    <div className="min-h-screen bg-background p-8 flex justify-center">
+    <div className="flex justify-center p-8 bg-background">
       <Card className="w-full max-w-6xl">
         <CardHeader>
-          <CardTitle>Dynamic Admin Panel</CardTitle>
+          <CardTitle>Data Input</CardTitle>
           <CardDescription>
             Database-driven schema form generator
           </CardDescription>
@@ -225,8 +225,8 @@ export default function DynamicAdmin() {
               <div className="border rounded-xl p-6 h-full">
                 <h4 className="font-semibold mb-4">{selectedTable} Preview</h4>
 
-                <div className="overflow-auto max-h-[400px] text-xs bg-muted p-4 rounded-md">
-                  <pre>
+                <div className="overflow-auto max-h-[860px] text-xs bg-muted p-4 rounded-md">
+                  <pre className="whitespace-pre-wrap break-words">
                     {JSON.stringify(tablePreview[selectedTable] || [], null, 2)}
                   </pre>
                 </div>
